@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Location Arrow
   - Ground
+  - Minion
+  - Moving Minions
+  - ScriptHolder
   layers:
   - Default
   - TransparentFX
