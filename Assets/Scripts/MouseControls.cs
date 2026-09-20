@@ -3,61 +3,72 @@ using System.Collections.Generic;
 
 public class MouseControls : MonoBehaviour
 {
-    public MinionMove movementScript;
+    //Arrow object and destination when it spawns
     public GameObject locationArrowPrefab;
     public GameObject locationArrow;
 
-    private Vector3 spawnLocation;
-    public Vector3 walkHereLocation;
+    //List for all minions, and one for selected ones to know who is and isn't selected for loops later
+    public List<MinionMove> selectableMinions;
+    public List<MinionMove> selectedMinions;
 
+    //Selection box
+    public RectTransform selectionBox;
+
+    //Arrow Spawn location
+    private Vector3 spawnLocation;
+
+
+    public bool isMouseDragging;
+    public bool isMouseButtonDown;
+
+    //Starting point for mouse when dragging
+    Vector3 mouseStartingPosition;
+
+    //Adjustable width and height for selectionBox
+    private float selectionWidth;
+    private float selectionHeight;
+
+    //Used for adjusting Minion range around destination
+    public float destinationRange;
+
+
+    private void Start()
+    {
+        isMouseButtonDown = false;
+        isMouseDragging = false;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        //When Left Mouse is pressed
+       
+        //Checks for mouse button and recieves first mouse position
         if (Input.GetMouseButtonDown(0))
         {
-            //Destroys location arrow if it exists
-            if(locationArrow != null)
+            isMouseButtonDown = true;
+            mouseStartingPosition = Input.mousePosition;
+
+            //Deselects all minions after left clicking
+            for (int i = 0; i < selectableMinions.Count; i++)
             {
-                Destroy(locationArrow);
-            }
-
-            //Sets ray from camera to the direction of the mouses position
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            //If Raycast has hit the something (The floor)
-            if (Physics.Raycast(ray, out hit))
-            {
-                //draws ray. (Start point, direction, color, duration)
-                Debug.DrawRay(ray.origin, ray.direction, Color.yellow, 1f);
-
-                if (hit.collider.CompareTag("Minion"))
-                {
-                    Debug.Log("Minion");
-                    //If the previous selection isn't the new selection
-                    if(movementScript != hit.collider.GetComponent<MinionMove>())
-                    {
-                        //Will deselect previous minion if there was one
-                        if(movementScript != null)
-                        {
-                            movementScript.MinionDeselected();
-                            movementScript = null;
-                        }
-                        //Sets new selection
-                        movementScript = hit.collider.GetComponent<MinionMove>();
-                        movementScript.MinionSelected();
-                    }
-                }
-                //Deselects previous minion if the player clicks anywhere but a minion
-                else if (movementScript != null)
-                {
-                    movementScript.MinionDeselected();
-                    movementScript = null;
-                }
+                selectableMinions[i].MinionDeselected();
+                selectedMinions.Remove(selectableMinions[i]);
             }
         }
+
+        if (isMouseButtonDown == true)
+        {
+            MouseIsDragging();
+        }
+        //Resets button press, selection box, and drag if player releases mouse button
+        if (Input.GetMouseButtonUp(0))
+        {
+            isMouseDragging = false;
+            isMouseButtonDown = false;
+            selectionBox.gameObject.SetActive(false);
+        }
+
+
 
         //Right mouse
         if (Input.GetMouseButtonDown(1))
@@ -84,18 +95,83 @@ public class MouseControls : MonoBehaviour
         }
     }
 
+    private void MouseIsDragging()
+    {
+        //If the mouse moves from the original position while mouse is down then the player is dragging it
+        if (Vector3.Distance(Input.mousePosition, mouseStartingPosition) > 1 && isMouseDragging == false)
+        {
+            isMouseDragging = true;
+            //Makes selection box appear
+            selectionBox.gameObject.SetActive(true);
+        }
+
+        if (isMouseDragging == true)
+        {
+            selectionWidth = Input.mousePosition.x - mouseStartingPosition.x;
+            selectionHeight = Input.mousePosition.y - mouseStartingPosition.y;
+
+            //Changes size of selection box based on mouse position while dragging.
+            //Mathf.abs makes sure the number can never be negative. That way the rectangle doesn't flip
+            selectionBox.sizeDelta = new Vector2(Mathf.Abs(selectionWidth), Mathf.Abs(selectionHeight));
+
+            //Sets the selection box dragged corner to the mouses position if anchored to the bottom left of screen
+            selectionBox.anchoredPosition = (mouseStartingPosition + Input.mousePosition) / 2;
+
+            SelectingMinions();
+
+        }
+    }
+
+    public void SelectingMinions()
+    {
+
+        //Gets all sides of the selection box
+        float leftSideOfBox = selectionBox.anchoredPosition.x - (selectionBox.sizeDelta.x / 2);
+        float rightSideOfBox = selectionBox.anchoredPosition.x + (selectionBox.sizeDelta.x / 2);
+        float topSideOfBox = selectionBox.anchoredPosition.y + (selectionBox.sizeDelta.y / 2);
+        float bottomSideOfBox = selectionBox.anchoredPosition.y - (selectionBox.sizeDelta.y / 2);
+
+        for (int i = 0; i < selectableMinions.Count; i++)
+        {
+            //Gets minions position based on where they are in relation to the camera
+            Vector3 minionPosition = Camera.main.WorldToScreenPoint(selectableMinions[i].transform.position);
+
+            //If minion is in between all the sides of the selection box.
+            //Aka if they are in the selection box
+            if (minionPosition.x > leftSideOfBox && minionPosition.x < rightSideOfBox && minionPosition.y > bottomSideOfBox && minionPosition.y < topSideOfBox)
+            {
+                //If not already selected yet, select it
+                if(!selectedMinions.Contains(selectableMinions[i]))
+                {
+                    selectedMinions.Add(selectableMinions[i]);
+                    selectableMinions[i].MinionSelected();
+                }
+            }
+            else
+            {
+                //if was selected but no longer in window, deselect it
+                if (selectedMinions.Contains(selectableMinions[i]))
+                {
+                    selectableMinions[i].MinionDeselected();
+                    selectedMinions.Remove(selectableMinions[i]);
+                }
+            }
+        }
+
+    }
+
 
 
     public void SpawnArrow()
     {
         //Spawns location arrow if there is none and a minion is selected
-        if (locationArrow == null && movementScript != null)
+        if (locationArrow == null && selectedMinions.Count > 0)
         {
             locationArrow = Instantiate(locationArrowPrefab, spawnLocation, Quaternion.identity);
-            movementScript.SetMoveTo();
+            TellMinionsWhereToGo();
         }
         //Destroys location arrow if one exists and no minion is selected 
-        else if(movementScript == null)
+        else if(selectedMinions.Count == 0)
         {
             Destroy(locationArrow);
         }
@@ -103,10 +179,35 @@ public class MouseControls : MonoBehaviour
         else
         {
             locationArrow.transform.position = spawnLocation;
+            TellMinionsWhereToGo();
         }
-
-
     }
+
+    public void TellMinionsWhereToGo()
+    {
+        //Records arrow position
+         Vector3 arrowPosition = locationArrow.gameObject.transform.position;
+        //Sets size of circle around arrow position
+        destinationRange = 1 + selectedMinions.Count / 3;
+        
+        //Sets destination of each selected minion
+        for (int i = 0; i < selectedMinions.Count; i++)
+        {
+            //Sets minions destinations to be a circle.
+            //Will continue set destinations of each minion in a circle shape around the target position
+            selectedMinions[i].moveHere = new Vector3 
+                (arrowPosition.x + destinationRange * Mathf.Cos(2* Mathf.PI*i / selectedMinions.Count),
+                arrowPosition.y,
+                arrowPosition.z + destinationRange * Mathf.Sin(2*Mathf.PI * i / selectedMinions.Count));
+
+            selectedMinions[i].MinionMoves();
+            Debug.Log(selectedMinions[i].moveHere);
+        }
+        selectedMinions.Clear();
+    }
+
+
+
 }
 
 

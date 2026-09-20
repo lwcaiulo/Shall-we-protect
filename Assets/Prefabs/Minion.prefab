@@ -105,6 +105,7 @@ MonoBehaviour:
   minionIsSelected: 0
   minionIsMoving: 0
   moveHere: {x: 0, y: 0, z: 0}
+  timer: 0
 --- !u!65 &7439434695517584423
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -167,7 +168,7 @@ NavMeshAgent:
   m_Acceleration: 2
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

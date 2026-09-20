@@ -7,7 +7,6 @@ public class MinionMove : MonoBehaviour
     GameObject scriptHolder;
 
     NavMeshAgent minionAgent;
-
     MeshRenderer minionRenderer;
 
     public bool minionIsSelected = false;
@@ -26,17 +25,23 @@ public class MinionMove : MonoBehaviour
         minionAgent = GetComponent<NavMeshAgent>();
         minionRenderer = GetComponent<MeshRenderer>();
 
+
         minionRenderer.material.color = Color.red;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Mainly used to change colour
-        if (!minionAgent.hasPath && minionIsSelected == false)
+        if(minionIsMoving == true && minionIsSelected == false)
         {
-            minionIsMoving = false;
-            MinionDeselected(); 
+            //Will stop movement and return to idle
+            if (minionAgent.remainingDistance <= 0.25)
+            {
+                    minionIsMoving = false;
+                    minionAgent.ResetPath();
+                    MinionDeselected();
+            }
+
         }
     }
 
@@ -62,20 +67,12 @@ public class MinionMove : MonoBehaviour
         }
     }
 
-    //Sets the minions destination and toggles Move script
-    public void SetMoveTo()
-    {
-        moveHere = mouseScript.locationArrow.transform.position;
-        MinionMoves();
-    }
-
     //Sets destination for minion nav agent and resets selection for this and mouse script
-    private void MinionMoves()
+    public void MinionMoves()
     {
         minionIsMoving = true;
         minionRenderer.material.color = Color.green;
         minionAgent.SetDestination(moveHere);
         minionIsSelected = false;
-        mouseScript.movementScript = null;
     }
 }
