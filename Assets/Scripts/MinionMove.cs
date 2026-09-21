@@ -35,7 +35,7 @@ public class MinionMove : MonoBehaviour
         if(minionIsMoving == true && minionIsSelected == false)
         {
             //Will stop movement and return to idle
-            if (minionAgent.remainingDistance <= 0.25)
+            if (minionAgent.destination == null)
             {
                     minionIsMoving = false;
                     minionAgent.ResetPath();

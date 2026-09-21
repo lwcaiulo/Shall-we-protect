@@ -8,6 +8,7 @@ public class MouseControls : MonoBehaviour
     public GameObject locationArrow;
 
     //List for all minions, and one for selected ones to know who is and isn't selected for loops later
+    public List<GameObject> minionObjects;
     public List<MinionMove> selectableMinions;
     public List<MinionMove> selectedMinions;
 
@@ -36,6 +37,14 @@ public class MouseControls : MonoBehaviour
     {
         isMouseButtonDown = false;
         isMouseDragging = false;
+
+        //Puts all game minion game objects into array and then passes the scripts over to the selection list
+        GameObject[] minionObjects = GameObject.FindGameObjectsWithTag("Minion");
+        for (int i = 0; i < minionObjects.Length; i++)
+        {
+            MinionMove minionMove = minionObjects[i].transform.GetComponent<MinionMove>();
+            selectableMinions.Add(minionMove);
+        }
     }
 
     // Update is called once per frame
