@@ -9,6 +9,8 @@ TagManager:
   - Minion
   - Moving Minions
   - ScriptHolder
+  - Core
+  - Enemy
   layers:
   - Default
   - TransparentFX

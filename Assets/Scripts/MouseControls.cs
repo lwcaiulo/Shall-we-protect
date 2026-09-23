@@ -32,6 +32,8 @@ public class MouseControls : MonoBehaviour
     //Used for adjusting Minion range around destination
     public float destinationRange;
 
+    private GameObject selectedEnemy;
+
 
     private void Start()
     {
@@ -50,7 +52,8 @@ public class MouseControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        UiTracking.Instance.minionCount = selectableMinions.Count;
+
         //Checks for mouse button and recieves first mouse position
         if (Input.GetMouseButtonDown(0))
         {

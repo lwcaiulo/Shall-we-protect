@@ -14,6 +14,9 @@ public class MinionMove : MonoBehaviour
 
     public Vector3 moveHere;
 
+    public float waitTillStop = 3f;
+    private float timer = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,6 +44,24 @@ public class MinionMove : MonoBehaviour
                     minionAgent.ResetPath();
                     MinionDeselected();
             }
+
+            //If the minion is staying still after start of movement it'll stop there
+            //This is so it doesn't get stuck trying to get to an unreachable spot
+            if (waitTillStop < timer)
+            {
+                if (minionAgent.velocity.magnitude < 0.01f)
+                {
+                    minionIsMoving = false;
+                    minionAgent.ResetPath();
+                    MinionDeselected();
+                    timer = 0;
+                }
+            }
+            else 
+            {
+                timer = timer + Time.deltaTime;
+            }
+
 
         }
     }
@@ -74,5 +95,18 @@ public class MinionMove : MonoBehaviour
         minionRenderer.material.color = Color.green;
         minionAgent.SetDestination(moveHere);
         minionIsSelected = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    { 
+        //Will destroy enemy, remove this from lists, then destroy it
+        if(collision.gameObject.tag == "Enemy")
+        {
+            EnemySpawner.Instance.allEnemies.Remove(collision.gameObject);
+            Destroy(collision.gameObject);
+            mouseScript.selectableMinions.Remove(this);
+            mouseScript.selectedMinions.Remove(this);
+            Destroy(this.gameObject);
+        }
     }
 }
