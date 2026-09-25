@@ -13,7 +13,6 @@ public class EnemyMovement : MonoBehaviour
         //Finds core on spawn and retrieves its position
         coreObject = GameObject.FindGameObjectWithTag("Core");
         corePosition = new Vector3( coreObject.transform.position.x, 0.5f, coreObject.transform.position.z );
-        EnemySpawner.Instance.allEnemies.Add(this.gameObject);
     }
 
     // Update is called once per frame
@@ -30,7 +29,28 @@ public class EnemyMovement : MonoBehaviour
         if (collision.gameObject == coreObject) 
         {
             CoreLife.Instance.currentLife = CoreLife.Instance.currentLife - 1;
-            EnemySpawner.Instance.allEnemies.Remove(this.gameObject);
+            UiTracking.Instance.UpdateCorePercent();
+
+            UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
+            UiTracking.Instance.UpdateEnemyUI();
+
+            Destroy(this.gameObject);
+        }
+
+        //When this enemy collides with minion
+        //Put here rather than on the minion because of bugs when multiple minions collide with the same enemy at the same time
+        if (collision.gameObject.CompareTag("Minion")){
+
+            //Remove minion from lists and update minion count before destroying it
+            MouseControls.Instance.selectableMinions.Remove(collision.transform.GetComponent<MinionMove>());
+            MouseControls.Instance.selectedMinions.Remove(collision.transform.GetComponent<MinionMove>());
+            UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
+            UiTracking.Instance.UpdateMinionUI();
+            Destroy(collision.gameObject);
+
+            //Update enemy count before destroying it
+            UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
+            UiTracking.Instance.UpdateEnemyUI();
             Destroy(this.gameObject);
         }
     }

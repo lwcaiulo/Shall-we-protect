@@ -3,8 +3,6 @@ using UnityEngine.AI;
 
 public class MinionMove : MonoBehaviour
 {
-    MouseControls mouseScript;
-    GameObject scriptHolder;
 
     NavMeshAgent minionAgent;
     MeshRenderer minionRenderer;
@@ -20,9 +18,6 @@ public class MinionMove : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //Grabs mouse script from script holder
-        scriptHolder = GameObject.FindWithTag("ScriptHolder");
-        mouseScript = scriptHolder.GetComponent<MouseControls>();
 
         //Grabs navmesh from model
         minionAgent = GetComponent<NavMeshAgent>();
@@ -97,16 +92,4 @@ public class MinionMove : MonoBehaviour
         minionIsSelected = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    { 
-        //Will destroy enemy, remove this from lists, then destroy it
-        if(collision.gameObject.tag == "Enemy")
-        {
-            EnemySpawner.Instance.allEnemies.Remove(collision.gameObject);
-            Destroy(collision.gameObject);
-            mouseScript.selectableMinions.Remove(this);
-            mouseScript.selectedMinions.Remove(this);
-            Destroy(this.gameObject);
-        }
-    }
 }

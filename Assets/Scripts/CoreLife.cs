@@ -4,7 +4,6 @@ public class CoreLife : MonoBehaviour
 {
     public int maximumLife = 5;
     public int currentLife;
-    public TextMeshProUGUI scoreTextBox;
     public static CoreLife Instance;
 
     private void Awake()
@@ -18,6 +17,7 @@ public class CoreLife : MonoBehaviour
     void Start()
     {
         currentLife = maximumLife;
+        UiTracking.Instance.UpdateCorePercent();
     }
 
     // Update is called once per frame
@@ -27,7 +27,5 @@ public class CoreLife : MonoBehaviour
         {
             Debug.Log("GameOver");
         }
-
-        scoreTextBox.text = "Core Lives: " + currentLife;
     }
 }

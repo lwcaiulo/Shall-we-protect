@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class MouseControls : MonoBehaviour
 {
+
+    public static MouseControls Instance;
     //Arrow object and destination when it spawns
     public GameObject locationArrowPrefab;
     public GameObject locationArrow;
@@ -34,11 +36,19 @@ public class MouseControls : MonoBehaviour
 
     private GameObject selectedEnemy;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
         isMouseButtonDown = false;
         isMouseDragging = false;
+
 
         //Puts all game minion game objects into array and then passes the scripts over to the selection list
         GameObject[] minionObjects = GameObject.FindGameObjectsWithTag("Minion");
@@ -47,12 +57,15 @@ public class MouseControls : MonoBehaviour
             MinionMove minionMove = minionObjects[i].transform.GetComponent<MinionMove>();
             selectableMinions.Add(minionMove);
         }
+
+        //Sets starting count for minions and updates it to the ui
+        UiTracking.Instance.minionCount = selectableMinions.Count;
+        UiTracking.Instance.UpdateMinionUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UiTracking.Instance.minionCount = selectableMinions.Count;
 
         //Checks for mouse button and recieves first mouse position
         if (Input.GetMouseButtonDown(0))
@@ -101,7 +114,6 @@ public class MouseControls : MonoBehaviour
                     //Make sure object ignores raycast so it doesn't fly to me
                     spawnLocation = new Vector3(hit.point.x, 0.25f, hit.point.z);
                     SpawnArrow();
-                    Debug.Log("Ground");
                 }
             }
         }
@@ -213,7 +225,6 @@ public class MouseControls : MonoBehaviour
                 arrowPosition.z + destinationRange * Mathf.Sin(2*Mathf.PI * i / selectedMinions.Count));
 
             selectedMinions[i].MinionMoves();
-            Debug.Log(selectedMinions[i].moveHere);
         }
         selectedMinions.Clear();
     }

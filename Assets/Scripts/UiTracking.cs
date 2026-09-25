@@ -8,6 +8,7 @@ public class UiTracking : MonoBehaviour
 
     public TextMeshProUGUI minionTracker;
     public TextMeshProUGUI enemyTracker;
+    public TextMeshProUGUI coreTextBox;
     public static UiTracking Instance;
 
     private void Awake()
@@ -17,16 +18,20 @@ public class UiTracking : MonoBehaviour
             Instance = this;
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+
+    public void UpdateEnemyUI()
     {
-        
+        enemyTracker.text = "Enemies left: " + enemyCount;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateMinionUI()
     {
         minionTracker.text = "Minions: " + minionCount;
-        enemyTracker.text = "Enemies left: " + enemyCount;
+    }
+
+    public void UpdateCorePercent()
+    {
+        coreTextBox.text = "Life Remaining: " + CoreLife.Instance.currentLife;
     }
 }
