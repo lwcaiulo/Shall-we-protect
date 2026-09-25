@@ -5,6 +5,7 @@ public class UiTracking : MonoBehaviour
 {
     public int minionCount;
     public int enemyCount;
+    public float corePercent;
 
     public TextMeshProUGUI minionTracker;
     public TextMeshProUGUI enemyTracker;
@@ -32,6 +33,7 @@ public class UiTracking : MonoBehaviour
 
     public void UpdateCorePercent()
     {
-        coreTextBox.text = "Life Remaining: " + CoreLife.Instance.currentLife;
+        corePercent = (CoreLife.Instance.currentLife / CoreLife.Instance.maximumLife) * 100;
+        coreTextBox.text = "Life Remaining: " + corePercent + "%";
     }
 }

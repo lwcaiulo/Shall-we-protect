@@ -14,12 +14,12 @@ public class LevelManager : MonoBehaviour
         {
             Instance = this;
         }
-
+        ChangeLevel();
 
     }
     void Start()
     {
-        ChangeLevel();
+
     }
 
     // Update is called once per frame

@@ -73,6 +73,8 @@ public class MouseControls : MonoBehaviour
             isMouseButtonDown = true;
             mouseStartingPosition = Input.mousePosition;
 
+
+
             //Deselects all minions after left clicking
             for (int i = 0; i < selectableMinions.Count; i++)
             {
@@ -88,6 +90,16 @@ public class MouseControls : MonoBehaviour
         //Resets button press, selection box, and drag if player releases mouse button
         if (Input.GetMouseButtonUp(0))
         {
+            //Sets ray from camera to the direction of the mouses position.
+            //Use this incase player only clicks and doesn't try to select multiple
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (isMouseDragging == false && Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Minion"))
+            {
+                selectedMinions.Add(hit.collider.transform.GetComponent<MinionMove>());
+                selectedMinions[0].MinionSelected();
+            }
+
             isMouseDragging = false;
             isMouseButtonDown = false;
             selectionBox.gameObject.SetActive(false);

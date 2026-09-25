@@ -2,8 +2,9 @@ using UnityEngine;
 using TMPro;
 public class CoreLife : MonoBehaviour
 {
-    public int maximumLife = 5;
-    public int currentLife;
+    //made a float to get percentage working in ui script
+    public float maximumLife = 5;
+    public float currentLife;
     public static CoreLife Instance;
 
     private void Awake()
