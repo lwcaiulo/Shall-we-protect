@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public float enemySpeed = 1f;
+    public float enemySpeed;
     public GameObject coreObject;
     private Vector3 corePosition;
 
@@ -13,6 +13,17 @@ public class EnemyMovement : MonoBehaviour
         //Finds core on spawn and retrieves its position
         coreObject = GameObject.FindGameObjectWithTag("Core");
         corePosition = new Vector3( coreObject.transform.position.x, 0.5f, coreObject.transform.position.z );
+
+        //Changes enemy speed for first 2 levels
+        if (LevelManager.Instance.currentLevel == "Level 1" || LevelManager.Instance.currentLevel == "Level 2")
+        {
+            enemySpeed = 2;
+        }
+        else
+        {
+            enemySpeed = 3;
+        }   
+
     }
 
     // Update is called once per frame

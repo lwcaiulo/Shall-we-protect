@@ -6,7 +6,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public List<GameObject> levelOneEnemies;
 
-    public List<GameObject> currentLevelEnemies;
+    public GameObject[] currentLevelEnemies;
 
     public GameObject[] enemySpawners;
 
@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UiTracking.Instance.enemyCount = currentLevelEnemies.Count;
+        UiTracking.Instance.enemyCount = currentLevelEnemies.Length;
         UiTracking.Instance.UpdateEnemyUI();
 
         StartCoroutine(SpawningEnemies());
@@ -33,7 +33,7 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawningEnemies()
     {
-        for (int i = 0; i < currentLevelEnemies.Count; i++)
+        for (int i = 0; i < currentLevelEnemies.Length; i++)
         {
             yield return new WaitForSeconds(howLongTillNextSpawn);
             GameObject enemy;

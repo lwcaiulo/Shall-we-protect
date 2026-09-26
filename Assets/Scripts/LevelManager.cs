@@ -1,9 +1,10 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
 
-    public int currentLevel;
+
+    public string currentLevel;
 
     public static LevelManager Instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,28 +15,9 @@ public class LevelManager : MonoBehaviour
         {
             Instance = this;
         }
-        ChangeLevel();
 
-    }
-    void Start()
-    {
-
+        currentLevel = SceneManager.GetActiveScene().name;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void ChangeLevel()
-    {
-        if(currentLevel == 1)
-        {
-            for (int i = 0; i < EnemySpawner.Instance.levelOneEnemies.Count; i++)
-            {
-                EnemySpawner.Instance.currentLevelEnemies.Add(EnemySpawner.Instance.levelOneEnemies[i]);
-            }
-        }
-    }
 }
