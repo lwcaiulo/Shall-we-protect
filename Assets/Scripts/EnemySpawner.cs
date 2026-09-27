@@ -4,15 +4,13 @@ using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public List<GameObject> levelOneEnemies;
-
     public GameObject[] currentLevelEnemies;
 
     public GameObject[] enemySpawners;
 
     public static EnemySpawner Instance;
 
-    public float howLongTillNextSpawn = 2f;
+    public float howLongTillNextSpawn;
 
     private void Awake()
     {
@@ -26,6 +24,21 @@ public class EnemySpawner : MonoBehaviour
     {
         UiTracking.Instance.enemyCount = currentLevelEnemies.Length;
         UiTracking.Instance.UpdateEnemyUI();
+
+        //Changes spawn rate based on level
+        if (LevelManager.Instance.currentLevelIndex == 1)
+        {
+            howLongTillNextSpawn = 3f;
+        }
+        else if(LevelManager.Instance.currentLevelIndex == 2)
+        {
+            howLongTillNextSpawn = 2f;
+        }
+        else
+        {
+            howLongTillNextSpawn = 1f;
+        }
+
 
         StartCoroutine(SpawningEnemies());
     }

@@ -12,10 +12,10 @@ public class EnemyMovement : MonoBehaviour
     {
         //Finds core on spawn and retrieves its position
         coreObject = GameObject.FindGameObjectWithTag("Core");
-        corePosition = new Vector3( coreObject.transform.position.x, 0.5f, coreObject.transform.position.z );
+        corePosition = new Vector3(coreObject.transform.position.x, 0.5f, coreObject.transform.position.z);
 
         //Changes enemy speed for first 2 levels
-        if (LevelManager.Instance.currentLevel == "Level 1" || LevelManager.Instance.currentLevel == "Level 2")
+        if (LevelManager.Instance.currentLevelIndex == 1 || LevelManager.Instance.currentLevelIndex == 2)
         {
             enemySpeed = 2;
         }

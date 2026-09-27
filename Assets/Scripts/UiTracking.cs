@@ -24,11 +24,16 @@ public class UiTracking : MonoBehaviour
     public void UpdateEnemyUI()
     {
         enemyTracker.text = "Enemies left: " + enemyCount;
+        if (enemyCount < 1 && corePercent != 0)
+        {
+            LevelManager.Instance.NextLevel();
+        }
     }
 
     public void UpdateMinionUI()
     {
         minionTracker.text = "Minions: " + minionCount;
+
     }
 
     public void UpdateCorePercent()

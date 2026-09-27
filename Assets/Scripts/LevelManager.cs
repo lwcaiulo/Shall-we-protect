@@ -4,7 +4,7 @@ public class LevelManager : MonoBehaviour
 {
 
 
-    public string currentLevel;
+    public int currentLevelIndex;
 
     public static LevelManager Instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,8 +16,15 @@ public class LevelManager : MonoBehaviour
             Instance = this;
         }
 
-        currentLevel = SceneManager.GetActiveScene().name;
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+    }
+    private void Start()
+    {
+        
     }
 
-
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(currentLevelIndex + 1);
+    }
 }

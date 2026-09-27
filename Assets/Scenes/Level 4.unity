@@ -807,50 +807,11 @@ MonoBehaviour:
   - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
   - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
   - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  currentLevelEnemies:
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
-  - {fileID: 3358756105833309664, guid: 3d11b47210c6d744aaccf0a3bb60de72, type: 3}
+  currentLevelEnemies: []
   enemySpawners:
   - {fileID: 31472543}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1240450503}
+  - {fileID: 521901611}
   howLongTillNextSpawn: 4
 --- !u!114 &200754367
 MonoBehaviour:
@@ -864,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20d77c6e2274594a9507dc4235215f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 
+  currentLevelIndex: 0
 --- !u!1001 &373091222
 PrefabInstance:
   m_ObjectHideFlags: 0

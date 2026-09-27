@@ -226,18 +226,27 @@ public class MouseControls : MonoBehaviour
         //Sets size of circle around arrow position
         destinationRange = 1 + selectedMinions.Count / 3;
         
-        //Sets destination of each selected minion
-        for (int i = 0; i < selectedMinions.Count; i++)
+        if(selectedMinions.Count > 1)
         {
-            //Sets minions destinations to be a circle.
-            //Will continue set destinations of each minion in a circle shape around the target position
-            selectedMinions[i].moveHere = new Vector3 
-                (arrowPosition.x + destinationRange * Mathf.Cos(2* Mathf.PI*i / selectedMinions.Count),
-                arrowPosition.y,
-                arrowPosition.z + destinationRange * Mathf.Sin(2*Mathf.PI * i / selectedMinions.Count));
+            //Sets destination of each selected minion
+            for (int i = 0; i < selectedMinions.Count; i++)
+            {
+                //Sets minions destinations to be a circle.
+                //Will continue set destinations of each minion in a circle shape around the target position
+                selectedMinions[i].moveHere = new Vector3
+                    (arrowPosition.x + destinationRange * Mathf.Cos(2 * Mathf.PI * i / selectedMinions.Count),
+                    arrowPosition.y,
+                    arrowPosition.z + destinationRange * Mathf.Sin(2 * Mathf.PI * i / selectedMinions.Count));
 
-            selectedMinions[i].MinionMoves();
+                selectedMinions[i].MinionMoves();
+            }
         }
+        else
+        {
+            selectedMinions[0].moveHere = arrowPosition;
+            selectedMinions[0].MinionMoves();
+        }
+
         selectedMinions.Clear();
     }
 
