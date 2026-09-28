@@ -11,6 +11,8 @@ TagManager:
   - ScriptHolder
   - Core
   - Enemy
+  - Exploding Enemy
+  - Explosion
   layers:
   - Default
   - TransparentFX

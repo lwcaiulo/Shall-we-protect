@@ -26,13 +26,17 @@ public class EnemySpawner : MonoBehaviour
         UiTracking.Instance.UpdateEnemyUI();
 
         //Changes spawn rate based on level
-        if (LevelManager.Instance.currentLevelIndex == 1)
+        if (LevelManager.Instance.currentLevelIndex == 1 || LevelManager.Instance.currentLevelIndex == 7)
         {
             howLongTillNextSpawn = 3f;
         }
         else if(LevelManager.Instance.currentLevelIndex == 2)
         {
             howLongTillNextSpawn = 2f;
+        }
+        else if(LevelManager.Instance.currentLevelIndex == 4)
+        {
+            howLongTillNextSpawn = 6f;
         }
         else
         {

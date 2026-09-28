@@ -25,6 +25,9 @@ public class LevelManager : MonoBehaviour
 
     public void NextLevel()
     {
-        SceneManager.LoadScene(currentLevelIndex + 1);
+        if(currentLevelIndex != 7){
+            SceneManager.LoadScene(currentLevelIndex + 1);
+        }
+
     }
 }

@@ -5,7 +5,10 @@ public class EnemyMovement : MonoBehaviour
 {
     public float enemySpeed;
     public GameObject coreObject;
+    public GameObject explosionPrefab;
     private Vector3 corePosition;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,7 +18,10 @@ public class EnemyMovement : MonoBehaviour
         corePosition = new Vector3(coreObject.transform.position.x, 0.5f, coreObject.transform.position.z);
 
         //Changes enemy speed for first 2 levels
-        if (LevelManager.Instance.currentLevelIndex == 1 || LevelManager.Instance.currentLevelIndex == 2)
+        if (LevelManager.Instance.currentLevelIndex == 1 
+            || LevelManager.Instance.currentLevelIndex == 2
+            || LevelManager.Instance.currentLevelIndex == 7
+            || this.gameObject.CompareTag("Exploding Enemy"))
         {
             enemySpeed = 2;
         }
@@ -39,8 +45,15 @@ public class EnemyMovement : MonoBehaviour
         //When the enemy collides with the core it'll die and take one life from the core
         if (collision.gameObject == coreObject) 
         {
+            if (this.gameObject.CompareTag("Exploding Enemy"))
+            {
+                SpawnExplosion();
+                CoreLife.Instance.currentLife = CoreLife.Instance.currentLife - 1;
+            }
+
             CoreLife.Instance.currentLife = CoreLife.Instance.currentLife - 1;
             UiTracking.Instance.UpdateCorePercent();
+
 
             UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
             UiTracking.Instance.UpdateEnemyUI();
@@ -52,6 +65,10 @@ public class EnemyMovement : MonoBehaviour
         //Put here rather than on the minion because of bugs when multiple minions collide with the same enemy at the same time
         if (collision.gameObject.CompareTag("Minion")){
 
+            if(this.gameObject.CompareTag("Exploding Enemy"))
+            {
+                SpawnExplosion();
+            }
             //Remove minion from lists and update minion count before destroying it
             MouseControls.Instance.selectableMinions.Remove(collision.transform.GetComponent<MinionMove>());
             MouseControls.Instance.selectedMinions.Remove(collision.transform.GetComponent<MinionMove>());
@@ -64,5 +81,9 @@ public class EnemyMovement : MonoBehaviour
             UiTracking.Instance.UpdateEnemyUI();
             Destroy(this.gameObject);
         }
+    }
+    public void SpawnExplosion() {
+        GameObject explosion;
+        explosion = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
     }
 }
