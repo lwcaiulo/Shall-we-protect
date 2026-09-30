@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using TMPro;
 
 public class MinionMove : MonoBehaviour
 {
@@ -9,11 +11,10 @@ public class MinionMove : MonoBehaviour
 
     public bool minionIsSelected = false;
     public bool minionIsMoving = false;
-
     public Vector3 moveHere;
-
-    public float waitTillStop = 3f;
+    public float waitTillStop = 1f;
     private float timer = 0;
+    public bool isCurrentlyInvincible = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -56,8 +57,6 @@ public class MinionMove : MonoBehaviour
             {
                 timer = timer + Time.deltaTime;
             }
-
-
         }
     }
 
@@ -86,6 +85,7 @@ public class MinionMove : MonoBehaviour
     //Sets destination for minion nav agent and resets selection for this and mouse script
     public void MinionMoves()
     {
+        timer = 0;
         minionIsMoving = true;
         minionRenderer.material.color = Color.green;
         minionAgent.SetDestination(moveHere);

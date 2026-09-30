@@ -6,6 +6,8 @@ public class EnemyMovement : MonoBehaviour
     public float enemySpeed;
     public GameObject coreObject;
     public GameObject explosionPrefab;
+    public GameObject playerDeathEffect;
+    private MinionMove minionScript;
     private Vector3 corePosition;
 
 
@@ -69,13 +71,20 @@ public class EnemyMovement : MonoBehaviour
             {
                 SpawnExplosion();
             }
-            //Remove minion from lists and update minion count before destroying it
-            MouseControls.Instance.selectableMinions.Remove(collision.transform.GetComponent<MinionMove>());
-            MouseControls.Instance.selectedMinions.Remove(collision.transform.GetComponent<MinionMove>());
-            UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
-            UiTracking.Instance.UpdateMinionUI();
-            Destroy(collision.gameObject);
 
+            MinionMove minionScript = collision.gameObject.GetComponent<MinionMove>(); 
+
+            //Won't destroy minion if it is currrently invincible
+            if(minionScript.isCurrentlyInvincible == false){
+                //Remove minion from lists and update minion count before destroying it
+                MouseControls.Instance.selectableMinions.Remove(collision.transform.GetComponent<MinionMove>());
+                MouseControls.Instance.selectedMinions.Remove(collision.transform.GetComponent<MinionMove>());
+                UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
+                UiTracking.Instance.UpdateMinionUI();
+                Destroy(collision.gameObject);
+                GameObject playerDeath;
+                playerDeath = Instantiate(playerDeathEffect, collision.transform.position, Quaternion.identity);
+            }
             //Update enemy count before destroying it
             UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
             UiTracking.Instance.UpdateEnemyUI();

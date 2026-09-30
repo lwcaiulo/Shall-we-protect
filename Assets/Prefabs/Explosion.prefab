@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7336641220913821978}
   - component: {fileID: 7722193008769730642}
   - component: {fileID: -8707479320849434539}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Explosion
   m_TagString: Explosion
   m_Icon: {fileID: 0}
@@ -122,3 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 8682038601972504194}
+  playerDeathEffect: {fileID: 4074429777757661899, guid: e9e5a5d4b5f100c4790305606fc254b0, type: 3}

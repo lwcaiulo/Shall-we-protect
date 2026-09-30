@@ -4,7 +4,9 @@ public class ExplosionScript : MonoBehaviour
 {
     private float currentSize;
     public GameObject explosionPrefab;
+    public GameObject playerDeathEffect;
     private EnemyMovement enemyScript;
+    private MinionMove minionScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
 
@@ -23,13 +25,23 @@ public class ExplosionScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Minion"))
         {
-            //Remove minion from lists and update minion count before destroying it
-            MouseControls.Instance.selectableMinions.Remove(other.transform.GetComponent<MinionMove>());
-            MouseControls.Instance.selectedMinions.Remove(other.transform.GetComponent<MinionMove>());
-            UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
-            UiTracking.Instance.UpdateMinionUI();
-            Destroy(other.gameObject);
+            MinionMove minionScript = other.gameObject.GetComponent<MinionMove>();
+
+            //Won't destroy minion if it is currrently invincible
+            if (minionScript.isCurrentlyInvincible == false)
+            {
+                //Remove minion from lists and update minion count before destroying it
+                MouseControls.Instance.selectableMinions.Remove(other.transform.GetComponent<MinionMove>());
+                MouseControls.Instance.selectedMinions.Remove(other.transform.GetComponent<MinionMove>());
+                UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
+                UiTracking.Instance.UpdateMinionUI();
+                Destroy(other.gameObject);
+
+                GameObject playerDeath;
+                playerDeath = Instantiate(playerDeathEffect, other.transform.position, Quaternion.identity);
+            }
         }
+
         if (other.gameObject.CompareTag("Enemy"))
         {
             //Update enemy count before destroying it
@@ -37,6 +49,7 @@ public class ExplosionScript : MonoBehaviour
             UiTracking.Instance.UpdateEnemyUI();
             Destroy(other.gameObject);
         }
+
         if (other.gameObject.CompareTag("Exploding Enemy")){
             enemyScript = other.GetComponent<EnemyMovement>();
             enemyScript.SpawnExplosion();

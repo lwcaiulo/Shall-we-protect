@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7955929454496130878}
   - component: {fileID: 1544426041793250278}
   - component: {fileID: 4981016700774160641}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -151,3 +151,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpeed: 1
   coreObject: {fileID: 0}
+  explosionPrefab: {fileID: 0}
+  playerDeathEffect: {fileID: 4074429777757661899, guid: e9e5a5d4b5f100c4790305606fc254b0, type: 3}
