@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
 
-
+    public bool gameIsPaused;
     public int currentLevelIndex;
 
     public static LevelManager Instance;
@@ -20,7 +20,8 @@ public class LevelManager : MonoBehaviour
     }
     private void Start()
     {
-        
+        gameIsPaused = false;
+        Time.timeScale = 1;
     }
 
     public void NextLevel()

@@ -1005,6 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feedfeef2667c8f42a3fb6d1ec643f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerUpgradeScript: {fileID: 11400000, guid: 0c92717d0efe860469f15902b7927358, type: 2}
   locationArrowPrefab: {fileID: 7757623776976965728, guid: cc745c1ea73e0da4fb337bc7f998e34e, type: 3}
   locationArrow: {fileID: 0}
   minionObjects: []
@@ -1043,9 +1044,11 @@ MonoBehaviour:
   minionCount: 0
   enemyCount: 0
   corePercent: 0
+  playerUpgradeScript: {fileID: 11400000, guid: 0c92717d0efe860469f15902b7927358, type: 2}
   minionTracker: {fileID: 167457646}
   enemyTracker: {fileID: 2054783182}
   coreTextBox: {fileID: 1965333993}
+  upgradePopUp: {fileID: 0}
 --- !u!114 &200754366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,6 +1108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e20d77c6e2274594a9507dc4235215f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameIsPaused: 0
   currentLevelIndex: 0
 --- !u!1 &221106710
 GameObject:
@@ -11327,7 +11331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3617920601610123569, guid: 9309fb513b2970040ad878c1bdccce56, type: 3}
       propertyPath: m_Acceleration
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3617920601610123569, guid: 9309fb513b2970040ad878c1bdccce56, type: 3}
       propertyPath: m_AngularSpeed

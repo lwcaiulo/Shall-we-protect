@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections.Generic;
 
 public class MouseControls : MonoBehaviour
 {
 
     public static MouseControls Instance;
+
+    public SavedPlayerUpgrades playerUpgradeScript;
     //Arrow object and destination when it spawns
     public GameObject locationArrowPrefab;
     public GameObject locationArrow;
@@ -56,79 +59,103 @@ public class MouseControls : MonoBehaviour
         {
             MinionMove minionMove = minionObjects[i].transform.GetComponent<MinionMove>();
             selectableMinions.Add(minionMove);
+            if(selectableMinions[i].isSoloMinion == false)
+            {
+                minionObjects[i].transform.localScale = Vector3.one * (1 + (playerUpgradeScript.amountOfSizeUpgrades * 0.2f));
+
+                NavMeshAgent minionAgent = minionObjects[i].GetComponent<NavMeshAgent>();
+                minionAgent.speed = 5 + playerUpgradeScript.amountOfSpeedUpgrades;
+                minionAgent.acceleration = 4 + playerUpgradeScript.amountOfSpeedUpgrades;
+                minionAgent.angularSpeed = 250 + (playerUpgradeScript.amountOfSpeedUpgrades * 25);
+            }
+
         }
 
         //Sets starting count for minions and updates it to the ui
         UiTracking.Instance.minionCount = selectableMinions.Count;
         UiTracking.Instance.UpdateMinionUI();
+
+        if(selectableMinions[0].isSoloMinion == true)
+        {
+            selectedMinions.Add(selectableMinions[0]);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        //Checks for mouse button and recieves first mouse position
-        if (Input.GetMouseButtonDown(0))
+        if(LevelManager.Instance.gameIsPaused == false)
         {
-            isMouseButtonDown = true;
-            mouseStartingPosition = Input.mousePosition;
-
-
-
-            //Deselects all minions after left clicking
-            for (int i = 0; i < selectableMinions.Count; i++)
+            //Checks for mouse button and recieves first mouse position
+            if (Input.GetMouseButtonDown(0))
             {
-                selectableMinions[i].MinionDeselected();
-                selectedMinions.Remove(selectableMinions[i]);
-            }
-        }
-
-        if (isMouseButtonDown == true)
-        {
-            MouseIsDragging();
-        }
-        //Resets button press, selection box, and drag if player releases mouse button
-        if (Input.GetMouseButtonUp(0))
-        {
-            //Sets ray from camera to the direction of the mouses position.
-            //Use this incase player only clicks and doesn't try to select multiple
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (isMouseDragging == false && Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Minion"))
-            {
-                selectedMinions.Add(hit.collider.transform.GetComponent<MinionMove>());
-                selectedMinions[0].MinionSelected();
-            }
-
-            isMouseDragging = false;
-            isMouseButtonDown = false;
-            selectionBox.gameObject.SetActive(false);
-        }
+                isMouseButtonDown = true;
+                mouseStartingPosition = Input.mousePosition;
 
 
 
-        //Right mouse
-        if (Input.GetMouseButtonDown(1))
-        {
-            //Sets ray from camera to the direction of the mouses position
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                //draws ray. (Start point, direction, color, duration)
-                Debug.DrawRay(ray.origin, ray.direction, Color.green, 5f);
-
-                if (hit.collider.CompareTag("Ground"))
+                //Deselects all minions after left clicking only if its not the last level solo minion
+                for (int i = 0; i < selectableMinions.Count; i++)
                 {
-                    //Draw the line and then move the object to that position.
-                    //Only tracking x and z so it doesn't clip into ground.
-                    //Make sure object ignores raycast so it doesn't fly to me
-                    spawnLocation = new Vector3(hit.point.x, 0.25f, hit.point.z);
-                    SpawnArrow();
+
+                    if (selectableMinions[i].isSoloMinion == false)
+                    {
+                        selectableMinions[i].MinionDeselected();
+                        selectedMinions.Remove(selectableMinions[i]);
+                    }
+
                 }
             }
+
+            if (isMouseButtonDown == true)
+            {
+                MouseIsDragging();
+            }
+            //Resets button press, selection box, and drag if player releases mouse button
+            if (Input.GetMouseButtonUp(0))
+            {
+                //Sets ray from camera to the direction of the mouses position.
+                //Use this incase player only clicks and doesn't try to select multiple
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (isMouseDragging == false && Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Minion"))
+                {
+                    selectedMinions.Add(hit.collider.transform.GetComponent<MinionMove>());
+                    selectedMinions[0].MinionSelected();
+                }
+
+                isMouseDragging = false;
+                isMouseButtonDown = false;
+                selectionBox.gameObject.SetActive(false);
+            }
+
+
+
+            //Right mouse
+            if (Input.GetMouseButtonDown(1))
+            {
+                //Sets ray from camera to the direction of the mouses position
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    //draws ray. (Start point, direction, color, duration)
+                    Debug.DrawRay(ray.origin, ray.direction, Color.green, 5f);
+
+                    if (hit.collider.CompareTag("Ground"))
+                    {
+                        //Draw the line and then move the object to that position.
+                        //Only tracking x and z so it doesn't clip into ground.
+                        //Make sure object ignores raycast so it doesn't fly to me
+                        spawnLocation = new Vector3(hit.point.x, 0.25f, hit.point.z);
+                        SpawnArrow();
+                    }
+                }
+            }
+
         }
+
     }
 
     private void MouseIsDragging()
@@ -152,8 +179,11 @@ public class MouseControls : MonoBehaviour
 
             //Sets the selection box dragged corner to the mouses position if anchored to the bottom left of screen
             selectionBox.anchoredPosition = (mouseStartingPosition + Input.mousePosition) / 2;
+            if (selectableMinions[0].isSoloMinion == false)
+            {
+                SelectingMinions();
+            }
 
-            SelectingMinions();
 
         }
     }
@@ -246,8 +276,11 @@ public class MouseControls : MonoBehaviour
             selectedMinions[0].moveHere = arrowPosition;
             selectedMinions[0].MinionMoves();
         }
+        if (selectableMinions[0].isSoloMinion == false)
+        {
+            selectedMinions.Clear();
+        }
 
-        selectedMinions.Clear();
     }
 
 

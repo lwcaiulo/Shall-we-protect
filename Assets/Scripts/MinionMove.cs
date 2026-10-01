@@ -15,7 +15,16 @@ public class MinionMove : MonoBehaviour
     public float waitTillStop = 1f;
     private float timer = 0;
     public bool isCurrentlyInvincible = false;
+    public bool isSoloMinion;
 
+    private void Awake()
+    {
+
+        if (gameObject.TryGetComponent(out InvincibilityScript soloInvincibilityScript))
+        {
+            isSoloMinion = true;
+        }
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,6 +35,7 @@ public class MinionMove : MonoBehaviour
 
 
         minionRenderer.material.color = Color.red;
+
     }
 
     // Update is called once per frame
