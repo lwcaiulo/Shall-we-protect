@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75cf5a8fc228bd7419655a3a24c2659b, type: 3}
   m_Name: SavedPlayerUpgrades
   m_EditorClassIdentifier: 
-  amountOfSpeedUpgrades: 3
-  amountOfSizeUpgrades: 2
+  amountOfSpeedUpgrades: 0
+  amountOfSizeUpgrades: 0
+  currentLevel: 0

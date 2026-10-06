@@ -7,5 +7,6 @@ public class SavedPlayerUpgrades : ScriptableObject
     public int amountOfSpeedUpgrades;
     public int amountOfSizeUpgrades;
 
+    public int currentLevel;
 
 }

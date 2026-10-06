@@ -16,6 +16,7 @@ public class MouseControls : MonoBehaviour
     public List<GameObject> minionObjects;
     public List<MinionMove> selectableMinions;
     public List<MinionMove> selectedMinions;
+    public Texture[] playerFaces;
 
     //Selection box
     public RectTransform selectionBox;
@@ -64,6 +65,8 @@ public class MouseControls : MonoBehaviour
                 minionObjects[i].transform.localScale = Vector3.one * (1 + (playerUpgradeScript.amountOfSizeUpgrades * 0.2f));
 
                 NavMeshAgent minionAgent = minionObjects[i].GetComponent<NavMeshAgent>();
+                selectableMinions[i].minionRenderer.material.mainTexture = playerFaces[Random.Range(0, playerFaces.Length)];
+
                 minionAgent.speed = 5 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.acceleration = 4 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.angularSpeed = 250 + (playerUpgradeScript.amountOfSpeedUpgrades * 25);
@@ -78,6 +81,7 @@ public class MouseControls : MonoBehaviour
         if(selectableMinions[0].isSoloMinion == true)
         {
             selectedMinions.Add(selectableMinions[0]);
+            selectableMinions[0].minionRenderer.material.mainTexture = playerFaces[0];
         }
     }
 

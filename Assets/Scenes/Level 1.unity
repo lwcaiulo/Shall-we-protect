@@ -457,6 +457,15 @@ MonoBehaviour:
   minionObjects: []
   selectableMinions: []
   selectedMinions: []
+  playerFaces:
+  - {fileID: 2800000, guid: 4504af46fcc7e154589fa762cb2dbe75, type: 3}
+  - {fileID: 2800000, guid: 6d08444c7b755814dba2fbcfa2462819, type: 3}
+  - {fileID: 2800000, guid: 6ca114ecb12a2ea459fa918654171609, type: 3}
+  - {fileID: 2800000, guid: 0f6f87d4ab0ca4148b191ca16a1c4985, type: 3}
+  - {fileID: 2800000, guid: d957b7b9d612ffb4ea76b63da773b90e, type: 3}
+  - {fileID: 2800000, guid: 6cba2a65e85063746a12296cfae3f374, type: 3}
+  - {fileID: 2800000, guid: 735aa718eb31efa469a79a620d6984d9, type: 3}
+  - {fileID: 2800000, guid: 6731d691f19836640ba5a6cfb3abeffa, type: 3}
   selectionBox: {fileID: 601681772}
   isMouseDragging: 0
   isMouseButtonDown: 0
@@ -538,6 +547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameIsPaused: 0
   currentLevelIndex: 0
+  playerUpgradeScript: {fileID: 11400000, guid: 0c92717d0efe860469f15902b7927358, type: 2}
 --- !u!1 &280341993
 GameObject:
   m_ObjectHideFlags: 0

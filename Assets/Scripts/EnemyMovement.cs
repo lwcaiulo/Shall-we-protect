@@ -30,8 +30,9 @@ public class EnemyMovement : MonoBehaviour
         else
         {
             enemySpeed = 3;
-        }   
+        }
 
+        gameObject.transform.LookAt(corePosition);
     }
 
     // Update is called once per frame
@@ -40,6 +41,7 @@ public class EnemyMovement : MonoBehaviour
         //Moves towards the core
         float movementSpeed = enemySpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, corePosition, movementSpeed);
+
     }
 
     private void OnCollisionEnter(Collision collision)

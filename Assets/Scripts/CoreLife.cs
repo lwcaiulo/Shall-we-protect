@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 public class CoreLife : MonoBehaviour
 {
     //made a float to get percentage working in ui script
@@ -26,7 +27,7 @@ public class CoreLife : MonoBehaviour
     {
         if(currentLife == 0)
         {
-            Debug.Log("GameOver");
+            SceneManager.LoadScene("Game Over");
         }
     }
 }

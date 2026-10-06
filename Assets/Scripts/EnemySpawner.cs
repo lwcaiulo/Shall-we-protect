@@ -8,9 +8,11 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject[] enemySpawners;
 
+
     public static EnemySpawner Instance;
 
     public float howLongTillNextSpawn;
+
 
     private void Awake()
     {

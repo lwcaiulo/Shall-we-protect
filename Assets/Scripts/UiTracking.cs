@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UiTracking : MonoBehaviour
 {
@@ -12,6 +14,10 @@ public class UiTracking : MonoBehaviour
     public TextMeshProUGUI minionTracker;
     public TextMeshProUGUI enemyTracker;
     public TextMeshProUGUI coreTextBox;
+
+    public TextMeshProUGUI continueText;
+    public Button continueButton;
+
     public static UiTracking Instance;
     public GameObject upgradePopUp;
 
@@ -21,6 +27,23 @@ public class UiTracking : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+    }
+    void Start()
+    {
+        //Updates continue button text and disallows access if player can't continue
+        if(continueButton != null)
+        {
+            if(playerUpgradeScript.currentLevel == 0)
+            {
+                continueButton.interactable = false;
+                continueText.text = "Continue";
+            }
+            else
+            {
+                continueButton.interactable = true;
+                continueText.text = "Level " + playerUpgradeScript.currentLevel;
+            }
         }
     }
 
@@ -42,7 +65,10 @@ public class UiTracking : MonoBehaviour
             }
             else if(LevelManager.Instance.currentLevelIndex == 7)
             {
-                Debug.Log("you win");
+                playerUpgradeScript.currentLevel = 0;
+                playerUpgradeScript.amountOfSizeUpgrades = 0;
+                playerUpgradeScript.amountOfSpeedUpgrades = 0;
+                SceneManager.LoadScene("Win Screen");
             }
 
         }

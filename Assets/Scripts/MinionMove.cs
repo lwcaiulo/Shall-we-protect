@@ -7,8 +7,9 @@ public class MinionMove : MonoBehaviour
 {
 
     NavMeshAgent minionAgent;
-    MeshRenderer minionRenderer;
-
+    public MeshRenderer minionRenderer;
+    Animator animator;
+    public GameObject minionBody;
     public bool minionIsSelected = false;
     public bool minionIsMoving = false;
     public Vector3 moveHere;
@@ -24,19 +25,20 @@ public class MinionMove : MonoBehaviour
         {
             isSoloMinion = true;
         }
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
         //Grabs navmesh from model
         minionAgent = GetComponent<NavMeshAgent>();
-        minionRenderer = GetComponent<MeshRenderer>();
+        minionRenderer = minionBody.GetComponent<MeshRenderer>();
+        animator = minionBody.GetComponent<Animator>();
 
 
-        minionRenderer.material.color = Color.red;
+        foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
+        {
+            limbRenderers.material.color = Color.red;
+        }
 
     }
+
 
     // Update is called once per frame
     void Update()
@@ -68,13 +70,17 @@ public class MinionMove : MonoBehaviour
                 timer = timer + Time.deltaTime;
             }
         }
+        animator.SetBool("isMoving", minionIsMoving);
     }
 
     //Declare that Minion is selected. Toggled in Mouse Script
     public void MinionSelected()
     {
         minionIsSelected = true;
-        minionRenderer.material.color = Color.yellow;
+        foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
+        {
+            limbRenderers.material.color = Color.yellow;
+        }
     }
 
     //Declare that Minion isn't selected. Toggled in Mouse Script
@@ -84,11 +90,17 @@ public class MinionMove : MonoBehaviour
         //Will keep moving color when deselected if needed
         if(minionIsMoving == true)
         {
-            minionRenderer.material.color = Color.green;
+            foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
+            {
+                limbRenderers.material.color = Color.green;
+            }
         }
         else
         {
-            minionRenderer.material.color = Color.red;
+            foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
+            {
+                limbRenderers.material.color = Color.red;
+            }
         }
     }
 
@@ -97,7 +109,12 @@ public class MinionMove : MonoBehaviour
     {
         timer = 0;
         minionIsMoving = true;
-        minionRenderer.material.color = Color.green;
+
+        foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
+        {
+            limbRenderers.material.color = Color.green;
+        }
+
         minionAgent.SetDestination(moveHere);
         minionIsSelected = false;
     }
