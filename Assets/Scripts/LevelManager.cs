@@ -9,7 +9,13 @@ public class LevelManager : MonoBehaviour
 
     public GameObject pauseScreen;
 
+    private bool gameHasStarted;
+
+    public GameObject introTutorialText;
+    public GameObject skipVisual;
+
     public SavedPlayerUpgrades playerUpgradeScript;
+
     public static LevelManager Instance;
     private ScoreScript scoreScript;
     public TextMeshProUGUI scoreText;
@@ -28,8 +34,19 @@ public class LevelManager : MonoBehaviour
     }
     private void Start()
     {
-        gameIsPaused = false;
-        Time.timeScale = 1;
+        if(introTutorialText != null)
+        {
+            gameHasStarted = false;
+            gameIsPaused = true;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            gameIsPaused = false;
+            gameHasStarted = true;
+            Time.timeScale = 1;
+        }
+
         if(pauseScreen != null)
         {
             pauseScreen.SetActive(false);
@@ -47,12 +64,17 @@ public class LevelManager : MonoBehaviour
         {
             highscoreText.text = "Highscore: " + playerUpgradeScript.highScore;
         }
+        if(skipVisual != null)
+        {
+            skipVisual.SetActive(false);
+        }
+
     }
 
     private void Update()
     {
         //Pauses game
-        if(Input.GetKeyDown("escape") && pauseScreen != null)
+        if(Input.GetKeyDown("escape") && pauseScreen != null && gameHasStarted == true)
         {
             if (gameIsPaused == false)
             {
@@ -109,5 +131,18 @@ public class LevelManager : MonoBehaviour
     public void TitleScreen()
     {
         SceneManager.LoadScene(0);
+    }
+    public void StartGameFromIntro()
+    {
+        introTutorialText.SetActive(false);
+        Time.timeScale = 1;
+        gameIsPaused = false;
+        gameHasStarted = true;
+    }
+
+    public void SkipLevel()
+    {
+        skipVisual.SetActive(true);
+        Time.timeScale = 3;
     }
 }

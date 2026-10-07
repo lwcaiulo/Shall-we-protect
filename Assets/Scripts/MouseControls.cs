@@ -158,6 +158,12 @@ public class MouseControls : MonoBehaviour
 
         }
 
+        //If there are no more minions alive the level will speed up
+        if(selectableMinions.Count == 0)
+        {
+            LevelManager.Instance.SkipLevel();
+        }
+
     }
 
     private void MouseIsDragging()

@@ -25,7 +25,7 @@ public class CoreLife : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentLife == 0)
+        if(currentLife <= 0)
         {
             SceneManager.LoadScene("Game Over");
         }
