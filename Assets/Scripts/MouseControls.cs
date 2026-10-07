@@ -88,15 +88,14 @@ public class MouseControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(LevelManager.Instance.gameIsPaused == false)
+        //Checks for minion count to fix nav mesh bugs when no minions left
+        if(LevelManager.Instance.gameIsPaused == false && selectableMinions.Count != 0)
         {
             //Checks for mouse button and recieves first mouse position
             if (Input.GetMouseButtonDown(0))
             {
                 isMouseButtonDown = true;
                 mouseStartingPosition = Input.mousePosition;
-
-
 
                 //Deselects all minions after left clicking only if its not the last level solo minion
                 for (int i = 0; i < selectableMinions.Count; i++)
@@ -107,7 +106,6 @@ public class MouseControls : MonoBehaviour
                         selectableMinions[i].MinionDeselected();
                         selectedMinions.Remove(selectableMinions[i]);
                     }
-
                 }
             }
 

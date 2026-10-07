@@ -9,4 +9,7 @@ public class SavedPlayerUpgrades : ScriptableObject
 
     public int currentLevel;
 
+    public float currentScore;
+    public float highScore;
+
 }

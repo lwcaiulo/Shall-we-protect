@@ -53,7 +53,7 @@ MonoBehaviour:
   minionIsSelected: 0
   minionIsMoving: 0
   moveHere: {x: 0, y: 0, z: 0}
-  waitTillStop: 3
+  waitTillStop: 2
   isCurrentlyInvincible: 0
   isSoloMinion: 0
 --- !u!65 &7439434695517584423
