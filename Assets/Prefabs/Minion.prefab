@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7439434695517584423}
   - component: {fileID: 2436840788829543906}
   - component: {fileID: 3617920601610123569}
+  - component: {fileID: 8249649378461132432}
   m_Layer: 0
   m_Name: Minion
   m_TagString: Minion
@@ -56,6 +57,9 @@ MonoBehaviour:
   waitTillStop: 2
   isCurrentlyInvincible: 0
   isSoloMinion: 0
+  movingColor: {r: 0.19607843, g: 0.9098039, b: 0.45882353, a: 0}
+  selectedColor: {r: 0.9882353, g: 0.90588236, b: 0.38431373, a: 0}
+  waitingColor: {r: 0.90588236, g: 0.11372549, b: 0.21176471, a: 0}
 --- !u!65 &7439434695517584423
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -126,6 +130,103 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!82 &8249649378461132432
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125528986633788307}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: f22252ff9b83fea4981fe767809c4a37, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.15
+  m_Pitch: 0.7
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 200
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2848429430129083591
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +241,7 @@ GameObject:
   - component: {fileID: 5790598516394034781}
   m_Layer: 0
   m_Name: Minion
-  m_TagString: Untagged
+  m_TagString: Minion Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -252,7 +353,7 @@ GameObject:
   - component: {fileID: 6742868727315349887}
   m_Layer: 0
   m_Name: pCube5
-  m_TagString: Untagged
+  m_TagString: Minion Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -338,7 +439,7 @@ GameObject:
   - component: {fileID: 6376047917695921489}
   m_Layer: 0
   m_Name: pCube6
-  m_TagString: Untagged
+  m_TagString: Minion Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -424,7 +525,7 @@ GameObject:
   - component: {fileID: 2240065793390326510}
   m_Layer: 0
   m_Name: pCube4
-  m_TagString: Untagged
+  m_TagString: Minion Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -510,7 +611,7 @@ GameObject:
   - component: {fileID: 3693715642290292249}
   m_Layer: 0
   m_Name: pCube2
-  m_TagString: Untagged
+  m_TagString: Minion Part
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

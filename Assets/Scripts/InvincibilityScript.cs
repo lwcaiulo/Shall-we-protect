@@ -6,6 +6,7 @@ public class InvincibilityScript : MonoBehaviour
     public TextMeshProUGUI invincibilityTimerMesh;
     public GameObject invincibilityEffect;
     public MinionMove minionScript;
+    public GameObject invincibilitySoundSource;
 
     public float invincibilityLength;
     float invincibilityTimer = 0f;
@@ -14,7 +15,8 @@ public class InvincibilityScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Used for time text during invincibility
+        //Used for time text and effect during invincibility
+        //As multiple could run at the same time, this makes it so it'll only stop once there are 0 running
         if (amountOfInvincibilitiesRunning > 0)
         {
             minionScript.isCurrentlyInvincible = true;
@@ -22,6 +24,7 @@ public class InvincibilityScript : MonoBehaviour
             invincibilityTimer -= Time.deltaTime;
             invincibilityTimerMesh.text = Mathf.Round(invincibilityTimer) + "";
             invincibilityEffect.SetActive(true);
+            invincibilitySoundSource.SetActive(true);
 
         }
         else
@@ -30,6 +33,7 @@ public class InvincibilityScript : MonoBehaviour
             minionScript.isCurrentlyInvincible = false;
             invincibilityEffect.SetActive(false);
             invincibilityTimerMesh.gameObject.SetActive(false);
+            invincibilitySoundSource.SetActive(false);
         }
     }
     //This is so it can be called apon by the powerup without the coroutine relying on it
@@ -49,6 +53,7 @@ public class InvincibilityScript : MonoBehaviour
 
         yield return new WaitForSeconds(invincibilityLength);
 
+        //Reduces amount of invincibilities running by 1
         amountOfInvincibilitiesRunning -= 1;
         Debug.Log("its off now");
 

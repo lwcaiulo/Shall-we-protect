@@ -4,10 +4,9 @@ using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
+    //Arrays to put level enemies and spawners
     public GameObject[] currentLevelEnemies;
-
     public GameObject[] enemySpawners;
-
 
     public static EnemySpawner Instance;
 
@@ -21,9 +20,11 @@ public class EnemySpawner : MonoBehaviour
             Instance = this;
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+
     void Start()
     {
+        //Update enemy count ui
         UiTracking.Instance.enemyCount = currentLevelEnemies.Length;
         UiTracking.Instance.UpdateEnemyUI();
 
@@ -49,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(SpawningEnemies());
     }
 
-
+    //Coroutine to spawn an enemy at spawn location every x seconds
     IEnumerator SpawningEnemies()
     {
         for (int i = 0; i < currentLevelEnemies.Length; i++)

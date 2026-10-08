@@ -4,7 +4,8 @@ using Unity.VisualScripting;
 public class DeathEffect : MonoBehaviour
 {
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    //Runs on death particle effects.
+    //Just so it gets destroyed after 2 seconds of the animation running
     void Start()
     {
         StartCoroutine(DeletingEffect());

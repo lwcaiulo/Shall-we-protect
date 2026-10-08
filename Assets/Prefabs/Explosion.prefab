@@ -123,3 +123,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 8682038601972504194}
   playerDeathEffect: {fileID: 4074429777757661899, guid: e9e5a5d4b5f100c4790305606fc254b0, type: 3}
+  enemyDeathEffect: {fileID: 4074429777757661899, guid: ebafee537a3907f4486650a8e5560dab, type: 3}

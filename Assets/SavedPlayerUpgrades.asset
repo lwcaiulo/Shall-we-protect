@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountOfSpeedUpgrades: 0
   amountOfSizeUpgrades: 0
-  currentLevel: 1
+  currentLevel: 0
   currentScore: 0
-  highScore: 1190
+  highScore: 0

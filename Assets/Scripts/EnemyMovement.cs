@@ -4,12 +4,18 @@ using UnityEngine.UIElements;
 public class EnemyMovement : MonoBehaviour
 {
     public float enemySpeed;
+
     public GameObject coreObject;
     public GameObject explosionPrefab;
     public GameObject playerDeathEffect;
+    public GameObject enemyDeathEffect;
+    public GameObject coreDamageEffect;
     private MinionMove minionScript;
     private Vector3 corePosition;
 
+
+    AudioSource soundEffectSource;
+    AudioList audioScript;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,7 +28,6 @@ public class EnemyMovement : MonoBehaviour
         //Changes enemy speed for first 2 levels
         if (LevelManager.Instance.currentLevelIndex == 1 
             || LevelManager.Instance.currentLevelIndex == 2
-            || LevelManager.Instance.currentLevelIndex == 7
             || this.gameObject.CompareTag("Exploding Enemy"))
         {
             enemySpeed = 2;
@@ -32,7 +37,14 @@ public class EnemyMovement : MonoBehaviour
             enemySpeed = 3;
         }
 
+        //Orients enemies towards the core
         gameObject.transform.LookAt(corePosition);
+
+        //Retrieve audio script and source
+        GameObject soundHolder = GameObject.FindWithTag("Sound Effects");
+        audioScript = soundHolder.GetComponent<AudioList>();
+        soundEffectSource = soundHolder.GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -49,6 +61,7 @@ public class EnemyMovement : MonoBehaviour
         //When the enemy collides with the core it'll die and take one life from the core
         if (collision.gameObject == coreObject) 
         {
+            //Take an extra life if exploding enemy and spawns explosion
             if (this.gameObject.CompareTag("Exploding Enemy"))
             {
                 SpawnExplosion();
@@ -58,9 +71,23 @@ public class EnemyMovement : MonoBehaviour
             CoreLife.Instance.currentLife = CoreLife.Instance.currentLife - 1;
             UiTracking.Instance.UpdateCorePercent();
 
-
             UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
             UiTracking.Instance.UpdateEnemyUI();
+
+            //Spawn enemy death partical effect
+            GameObject enemyDeath;
+            enemyDeath = Instantiate(enemyDeathEffect, this.transform.position, Quaternion.identity);
+
+            //Spawn core partical effect
+            GameObject coreDamage;
+            coreDamage = Instantiate(coreDamageEffect, new Vector3(collision.transform.position.x, collision.transform.position.y + 0.5f, collision.transform.position.z + 0.4f), Quaternion.identity);
+
+            //Plays audio when enemy collides with core
+            if(CoreLife.Instance.currentLife > 0)
+            {
+                soundEffectSource.PlayOneShot(audioScript.coreDamageSound, 0.1f);
+                soundEffectSource.PlayOneShot(audioScript.enemyDeathSound, 0.1f);
+            }
 
             Destroy(this.gameObject);
         }
@@ -69,6 +96,7 @@ public class EnemyMovement : MonoBehaviour
         //Put here rather than on the minion because of bugs when multiple minions collide with the same enemy at the same time
         if (collision.gameObject.CompareTag("Minion")){
 
+            //Spawns explosion
             if(this.gameObject.CompareTag("Exploding Enemy"))
             {
                 SpawnExplosion();
@@ -83,18 +111,31 @@ public class EnemyMovement : MonoBehaviour
                 MouseControls.Instance.selectedMinions.Remove(collision.transform.GetComponent<MinionMove>());
                 UiTracking.Instance.minionCount = UiTracking.Instance.minionCount - 1;
                 UiTracking.Instance.UpdateMinionUI();
+
+                soundEffectSource.PlayOneShot(audioScript.minionDeathSound, 0.1f);
+
                 Destroy(collision.gameObject);
+                //Spawns player partical effect
                 GameObject playerDeath;
                 playerDeath = Instantiate(playerDeathEffect, collision.transform.position, Quaternion.identity);
             }
             //Update enemy count before destroying it
             UiTracking.Instance.enemyCount = UiTracking.Instance.enemyCount - 1;
             UiTracking.Instance.UpdateEnemyUI();
+
+            //Spawns enemy partical effect
+            GameObject enemyDeath;
+            enemyDeath = Instantiate(enemyDeathEffect, this.transform.position, Quaternion.identity);
+
+            soundEffectSource.PlayOneShot(audioScript.enemyDeathSound, 0.1f);
+
             Destroy(this.gameObject);
         }
     }
+    //Spawns explosion and plays sound
     public void SpawnExplosion() {
         GameObject explosion;
+        soundEffectSource.PlayOneShot(audioScript.explosionSound, 0.5f);
         explosion = Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
     }
 }

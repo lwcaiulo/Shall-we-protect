@@ -5,18 +5,30 @@ using TMPro;
 
 public class MinionMove : MonoBehaviour
 {
-
+    //Resources of individual minion
     NavMeshAgent minionAgent;
     public MeshRenderer minionRenderer;
     Animator animator;
+    AudioSource minionWalkSoundSource;
     public GameObject minionBody;
+
+
     public bool minionIsSelected = false;
     public bool minionIsMoving = false;
+
     public Vector3 moveHere;
+
     public float waitTillStop = 1f;
     private float timer = 0;
+
     public bool isCurrentlyInvincible = false;
     public bool isSoloMinion;
+
+    //Public colors so it can be easily changed in editor
+    public Color movingColor;
+    public Color selectedColor;
+    public Color waitingColor;
+
 
     private void Awake()
     {
@@ -26,15 +38,23 @@ public class MinionMove : MonoBehaviour
             isSoloMinion = true;
         }
 
-        //Grabs navmesh from model
+        //Grabs recourses from minion without having to in editor
         minionAgent = GetComponent<NavMeshAgent>();
         minionRenderer = minionBody.GetComponent<MeshRenderer>();
         animator = minionBody.GetComponent<Animator>();
+        minionWalkSoundSource = gameObject.GetComponent<AudioSource>();
 
 
+        //Changes the colour for all child limbs on the model
+        //Mainly done this way as model is a child of empty object holding this script
+        //Had issues with animation and rotating so had to do it this way,,,,
         foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
         {
-            limbRenderers.material.color = Color.red;
+            if (limbRenderers.CompareTag("Minion Part"))
+            {
+                limbRenderers.material.color = waitingColor;
+            }
+
         }
 
     }
@@ -62,14 +82,19 @@ public class MinionMove : MonoBehaviour
                     minionIsMoving = false;
                     minionAgent.ResetPath();
                     MinionDeselected();
+                    //Stops walking sound
+                    minionWalkSoundSource.Stop();
                     timer = 0;
                 }
             }
             else 
             {
                 timer = timer + Time.deltaTime;
+                
             }
+
         }
+        //For animator to know when minion is moving or not
         animator.SetBool("isMoving", minionIsMoving);
     }
 
@@ -79,7 +104,11 @@ public class MinionMove : MonoBehaviour
         minionIsSelected = true;
         foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
         {
-            limbRenderers.material.color = Color.yellow;
+            if (limbRenderers.CompareTag("Minion Part"))
+            {
+                limbRenderers.material.color = selectedColor;
+            }
+
         }
     }
 
@@ -87,19 +116,28 @@ public class MinionMove : MonoBehaviour
     public void MinionDeselected()
     {
         minionIsSelected = false;
+
         //Will keep moving color when deselected if needed
         if(minionIsMoving == true)
         {
             foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
             {
-                limbRenderers.material.color = Color.green;
+                if (limbRenderers.CompareTag("Minion Part"))
+                {
+                    limbRenderers.material.color = movingColor;
+                }
+
             }
         }
         else
         {
             foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
             {
-                limbRenderers.material.color = Color.red;
+                if (limbRenderers.CompareTag("Minion Part"))
+                {
+                    limbRenderers.material.color = waitingColor;
+                }
+
             }
         }
     }
@@ -112,9 +150,14 @@ public class MinionMove : MonoBehaviour
 
         foreach (Renderer limbRenderers in GetComponentsInChildren<Renderer>())
         {
-            limbRenderers.material.color = Color.green;
-        }
+            if (limbRenderers.CompareTag("Minion Part"))
+            {
+                limbRenderers.material.color = movingColor;
+            }
 
+        }
+        //plays walking sound
+        minionWalkSoundSource.Play();
         minionAgent.SetDestination(moveHere);
         minionIsSelected = false;
     }

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class UiTracking : MonoBehaviour
 {
+    //Ui info that's updates
     public int minionCount;
     public int enemyCount;
     public float corePercent;
@@ -12,12 +13,13 @@ public class UiTracking : MonoBehaviour
     public SavedPlayerUpgrades playerUpgradeScript;
     private ScoreScript scoreScript;
 
+    //Text meshes
     public TextMeshProUGUI minionTracker;
     public TextMeshProUGUI enemyTracker;
     public TextMeshProUGUI coreTextBox;
     public TextMeshProUGUI scoreText;
-
     public TextMeshProUGUI continueText;
+
     public Button continueButton;
 
     public static UiTracking Instance;
@@ -34,6 +36,7 @@ public class UiTracking : MonoBehaviour
     void Start()
     {
         scoreScript = GetComponent<ScoreScript>();
+
         //Updates continue button text and disallows access if player can't continue
         if (continueButton != null)
         {
@@ -53,7 +56,10 @@ public class UiTracking : MonoBehaviour
 
     public void UpdateEnemyUI()
     {
+        //Updates enemy count ui
         enemyTracker.text = "Enemies left: " + enemyCount;
+
+        //Continues to next level. Last 2 levels don't need upgrades to popup and go straight to next level
         if (enemyCount < 1 && corePercent != 0)
         {
             //At end of all but last 2 levels
@@ -75,9 +81,11 @@ public class UiTracking : MonoBehaviour
             //End of last level
             else if(LevelManager.Instance.currentLevelIndex == 7)
             {
+                //Resets saved data so player can't continue from level 7 again
                 playerUpgradeScript.currentLevel = 0;
                 playerUpgradeScript.amountOfSizeUpgrades = 0;
                 playerUpgradeScript.amountOfSpeedUpgrades = 0;
+
                 scoreScript.UpdateScore();
                 scoreScript.EndOfGameScoreCalc();
                 SceneManager.LoadScene("Win Screen");
@@ -86,24 +94,29 @@ public class UiTracking : MonoBehaviour
         }
     }
 
+    //Updates how many minions are left in ui
     public void UpdateMinionUI()
     {
         minionTracker.text = "Minions: " + minionCount;
 
     }
 
+    //Updates Core percent in ui
     public void UpdateCorePercent()
     {
         corePercent = (CoreLife.Instance.currentLife / CoreLife.Instance.maximumLife) * 100;
         coreTextBox.text = "Life Remaining: " + corePercent + "%";
     }
 
+
+    //Activated from speed increase button
     public void IncreaseSpeed()
     {
         playerUpgradeScript.amountOfSpeedUpgrades += 1;
         LevelManager.Instance.NextLevel();
     }
-
+    
+    //Activated from size increase button
     public void IncreaseSize()
     {
         playerUpgradeScript.amountOfSizeUpgrades += 1;

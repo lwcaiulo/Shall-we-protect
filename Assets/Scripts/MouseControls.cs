@@ -8,6 +8,7 @@ public class MouseControls : MonoBehaviour
     public static MouseControls Instance;
 
     public SavedPlayerUpgrades playerUpgradeScript;
+
     //Arrow object and destination when it spawns
     public GameObject locationArrowPrefab;
     public GameObject locationArrow;
@@ -38,7 +39,12 @@ public class MouseControls : MonoBehaviour
     //Used for adjusting Minion range around destination
     public float destinationRange;
 
-    private GameObject selectedEnemy;
+    //Used to despawn arrow
+    private float arrowTimer;
+    private bool doesArrowExist;
+
+
+
 
     private void Awake()
     {
@@ -50,8 +56,10 @@ public class MouseControls : MonoBehaviour
 
     private void Start()
     {
+        //Resets bools
         isMouseButtonDown = false;
         isMouseDragging = false;
+        doesArrowExist = false;
 
 
         //Puts all game minion game objects into array and then passes the scripts over to the selection list
@@ -60,13 +68,18 @@ public class MouseControls : MonoBehaviour
         {
             MinionMove minionMove = minionObjects[i].transform.GetComponent<MinionMove>();
             selectableMinions.Add(minionMove);
+
+            //Wont run if on last level
             if(selectableMinions[i].isSoloMinion == false)
             {
+                //Increases minions size based on upgrades
                 minionObjects[i].transform.localScale = Vector3.one * (1 + (playerUpgradeScript.amountOfSizeUpgrades * 0.2f));
 
-                NavMeshAgent minionAgent = minionObjects[i].GetComponent<NavMeshAgent>();
+                //Randomizes face
                 selectableMinions[i].minionRenderer.material.mainTexture = playerFaces[Random.Range(0, playerFaces.Length)];
 
+                //Increases speed based on upgrades
+                NavMeshAgent minionAgent = minionObjects[i].GetComponent<NavMeshAgent>();
                 minionAgent.speed = 5 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.acceleration = 4 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.angularSpeed = 250 + (playerUpgradeScript.amountOfSpeedUpgrades * 25);
@@ -78,17 +91,19 @@ public class MouseControls : MonoBehaviour
         UiTracking.Instance.minionCount = selectableMinions.Count;
         UiTracking.Instance.UpdateMinionUI();
 
+        //Sets specific face for solo minion and doesn't give him upgrades for last level
         if(selectableMinions[0].isSoloMinion == true)
         {
             selectedMinions.Add(selectableMinions[0]);
             selectableMinions[0].minionRenderer.material.mainTexture = playerFaces[0];
         }
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Checks for minion count to fix nav mesh bugs when no minions left
+        //Also can't select when game is paused
         if(LevelManager.Instance.gameIsPaused == false && selectableMinions.Count != 0)
         {
             //Checks for mouse button and recieves first mouse position
@@ -100,7 +115,6 @@ public class MouseControls : MonoBehaviour
                 //Deselects all minions after left clicking only if its not the last level solo minion
                 for (int i = 0; i < selectableMinions.Count; i++)
                 {
-
                     if (selectableMinions[i].isSoloMinion == false)
                     {
                         selectableMinions[i].MinionDeselected();
@@ -109,11 +123,14 @@ public class MouseControls : MonoBehaviour
                 }
             }
 
+            //Runs drag code when mouse is pressed
             if (isMouseButtonDown == true)
             {
                 MouseIsDragging();
             }
-            //Resets button press, selection box, and drag if player releases mouse button
+
+
+            //Left mouse
             if (Input.GetMouseButtonUp(0))
             {
                 //Sets ray from camera to the direction of the mouses position.
@@ -126,6 +143,7 @@ public class MouseControls : MonoBehaviour
                     selectedMinions[0].MinionSelected();
                 }
 
+                //Resets button press, selection box, and drag if player releases mouse button
                 isMouseDragging = false;
                 isMouseButtonDown = false;
                 selectionBox.gameObject.SetActive(false);
@@ -139,17 +157,13 @@ public class MouseControls : MonoBehaviour
                 //Sets ray from camera to the direction of the mouses position
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-
                 if (Physics.Raycast(ray, out hit))
                 {
-                    //draws ray. (Start point, direction, color, duration)
-                    Debug.DrawRay(ray.origin, ray.direction, Color.green, 5f);
-
                     if (hit.collider.CompareTag("Ground"))
                     {
                         //Draw the line and then move the object to that position.
                         //Only tracking x and z so it doesn't clip into ground.
-                        //Make sure object ignores raycast so it doesn't fly to me
+                        //Make sure object ignores raycast so it doesn't fly to me lol
                         spawnLocation = new Vector3(hit.point.x, 0.25f, hit.point.z);
                         SpawnArrow();
                     }
@@ -159,13 +173,30 @@ public class MouseControls : MonoBehaviour
         }
 
         //If there are no more minions alive the level will speed up
-        if(selectableMinions.Count == 0)
+        if(selectableMinions.Count == 0 && UiTracking.Instance.enemyCount > 0 && CoreLife.Instance.isDestroyed == false)
         {
             LevelManager.Instance.SkipLevel();
         }
 
+
+        //Deletes arrow after certain amount of time
+        if(doesArrowExist == true)
+        {
+            if(arrowTimer < 2)
+            {
+                arrowTimer = arrowTimer + Time.deltaTime;
+            }
+            else
+            {
+                Destroy(locationArrow);
+                doesArrowExist = false;
+                arrowTimer = 0;
+
+            }
+        }
     }
 
+    //Runs when mouse is being dragged
     private void MouseIsDragging()
     {
         //If the mouse moves from the original position while mouse is down then the player is dragging it
@@ -178,6 +209,7 @@ public class MouseControls : MonoBehaviour
 
         if (isMouseDragging == true)
         {
+            //Logs comparison between when mouse was originally clicked vs where its at as its being dragged
             selectionWidth = Input.mousePosition.x - mouseStartingPosition.x;
             selectionHeight = Input.mousePosition.y - mouseStartingPosition.y;
 
@@ -187,6 +219,8 @@ public class MouseControls : MonoBehaviour
 
             //Sets the selection box dragged corner to the mouses position if anchored to the bottom left of screen
             selectionBox.anchoredPosition = (mouseStartingPosition + Input.mousePosition) / 2;
+
+            //Won't run on last level, as solo minion doesn't need to be selected
             if (selectableMinions[0].isSoloMinion == false)
             {
                 SelectingMinions();
@@ -196,6 +230,7 @@ public class MouseControls : MonoBehaviour
         }
     }
 
+    //Method to find who is and isn't selected
     public void SelectingMinions()
     {
 
@@ -235,7 +270,7 @@ public class MouseControls : MonoBehaviour
     }
 
 
-
+    //For spawning arrow visual for player and telling minions where to go
     public void SpawnArrow()
     {
         //Spawns location arrow if there is none and a minion is selected
@@ -243,34 +278,43 @@ public class MouseControls : MonoBehaviour
         {
             locationArrow = Instantiate(locationArrowPrefab, spawnLocation, Quaternion.identity);
             TellMinionsWhereToGo();
+            doesArrowExist = true;
         }
+
         //Destroys location arrow if one exists and no minion is selected 
         else if(selectedMinions.Count == 0)
         {
             Destroy(locationArrow);
+            doesArrowExist = false;
+            arrowTimer = 0;
         }
+
         //Changes location of existing location arrow if minion is selected and a arrow already exists
         else
         {
             locationArrow.transform.position = spawnLocation;
             TellMinionsWhereToGo();
+            arrowTimer = 0;
         }
     }
 
+    //As the name implies, this'll tell each minion where to go based on where the arrow is
     public void TellMinionsWhereToGo()
     {
         //Records arrow position
          Vector3 arrowPosition = locationArrow.gameObject.transform.position;
+
         //Sets size of circle around arrow position
         destinationRange = 1 + selectedMinions.Count / 3;
         
+        //Won't run if only 1 is selected as the circle location was offset from where player actually wanted to send minion
         if(selectedMinions.Count > 1)
         {
             //Sets destination of each selected minion
             for (int i = 0; i < selectedMinions.Count; i++)
             {
                 //Sets minions destinations to be a circle.
-                //Will continue set destinations of each minion in a circle shape around the target position
+                //Will continue to set destinations of each minion in a circle shape around the target position
                 selectedMinions[i].moveHere = new Vector3
                     (arrowPosition.x + destinationRange * Mathf.Cos(2 * Mathf.PI * i / selectedMinions.Count),
                     arrowPosition.y,
@@ -278,17 +322,19 @@ public class MouseControls : MonoBehaviour
 
                 selectedMinions[i].MinionMoves();
             }
+
         }
+        //For only 1 minion
         else
         {
             selectedMinions[0].moveHere = arrowPosition;
             selectedMinions[0].MinionMoves();
         }
+        //Resets selection if none were selected but right mouse was pressed
         if (selectableMinions[0].isSoloMinion == false)
         {
             selectedMinions.Clear();
         }
-
     }
 
 

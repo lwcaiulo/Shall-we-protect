@@ -287,7 +287,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameIsPaused: 0
   currentLevelIndex: 0
+  pauseScreen: {fileID: 0}
+  introTutorialText: {fileID: 0}
+  skipVisual: {fileID: 0}
   playerUpgradeScript: {fileID: 11400000, guid: 0c92717d0efe860469f15902b7927358, type: 2}
+  scoreText: {fileID: 0}
+  highscoreText: {fileID: 0}
 --- !u!4 &100465301
 Transform:
   m_ObjectHideFlags: 0
@@ -728,7 +733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.18238991, g: 0.030398302, b: 0.030398302, a: 1}
+  m_Color: {r: 0.19607843, g: 0.007843138, b: 0.12156863, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
