@@ -60,11 +60,11 @@ public class LevelManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Win Screen")
         {
             scoreText.text = "Score: " + playerUpgradeScript.currentScore;
-            highscoreText.text = "Highscore: " + playerUpgradeScript.highScore;
+            highscoreText.text = "Highscore: " + scoreScript.highScore;
         }
         if(SceneManager.GetActiveScene().name == "Title Screen")
         {
-            highscoreText.text = "Highscore: " + playerUpgradeScript.highScore;
+            highscoreText.text = "Highscore: " + scoreScript.highScore;
         }
 
 
@@ -72,6 +72,10 @@ public class LevelManager : MonoBehaviour
         {
             skipVisual.SetActive(false);
         }
+
+
+
+        
 
     }
 
@@ -102,6 +106,12 @@ public class LevelManager : MonoBehaviour
         {
 
             playerUpgradeScript.currentLevel = playerUpgradeScript.currentLevel + 1;
+
+            PlayerPrefs.SetInt("Speed", playerUpgradeScript.amountOfSpeedUpgrades);
+            PlayerPrefs.SetInt("Size", playerUpgradeScript.amountOfSizeUpgrades);
+            PlayerPrefs.SetInt("Level", playerUpgradeScript.currentLevel);
+            PlayerPrefs.SetFloat("Score", playerUpgradeScript.currentScore);
+
             SceneManager.LoadScene(currentLevelIndex + 1);
         }
 
@@ -115,6 +125,14 @@ public class LevelManager : MonoBehaviour
         playerUpgradeScript.amountOfSizeUpgrades = 0;
         playerUpgradeScript.amountOfSpeedUpgrades = 0;
         playerUpgradeScript.currentScore = 0;
+
+        //Resets player prefs
+        PlayerPrefs.SetInt("Speed", 0);
+        PlayerPrefs.SetInt("Size", 0);
+        PlayerPrefs.SetInt("Level", 1);
+        PlayerPrefs.SetFloat("Score", 0);
+
+
         SceneManager.LoadScene(1);
     }
 

@@ -10,6 +10,8 @@ public class UiTracking : MonoBehaviour
     public int enemyCount;
     public float corePercent;
 
+    private int levelContinueCount;
+
     public SavedPlayerUpgrades playerUpgradeScript;
     private ScoreScript scoreScript;
 
@@ -35,6 +37,7 @@ public class UiTracking : MonoBehaviour
     }
     void Start()
     {
+        levelContinueCount = PlayerPrefs.GetInt("Level", 0);
         scoreScript = GetComponent<ScoreScript>();
 
         //Updates continue button text and disallows access if player can't continue
@@ -48,7 +51,7 @@ public class UiTracking : MonoBehaviour
             else
             {
                 continueButton.interactable = true;
-                continueText.text = "Level " + playerUpgradeScript.currentLevel;
+                continueText.text = "Level " + levelContinueCount;
             }
         }
     }
