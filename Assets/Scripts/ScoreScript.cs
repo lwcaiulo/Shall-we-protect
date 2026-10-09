@@ -5,14 +5,10 @@ public class ScoreScript : MonoBehaviour
 
     //Changeable score bonus
     public float perfectGameBonus = 100;
-    public float highScore = 0;
 
     public SavedPlayerUpgrades playerUpgradesScript;
 
-    private void Start()
-    {
-        highScore = PlayerPrefs.GetFloat("Highscore", 0);
-    }
+
 
     //Called upon to update score
     public void UpdateScore()
@@ -28,10 +24,10 @@ public class ScoreScript : MonoBehaviour
     //Updates the highscore
     public void EndOfGameScoreCalc()
     {
-        if (playerUpgradesScript.currentScore > highScore)
+        if (playerUpgradesScript.currentScore > playerUpgradesScript.currentHighscore)
         {
-            highScore = playerUpgradesScript.currentScore;
-            PlayerPrefs.SetFloat("Highscore", highScore);
+            playerUpgradesScript.currentHighscore = playerUpgradesScript.currentScore;
+            PlayerPrefs.SetFloat("Highscore", playerUpgradesScript.currentHighscore);
         }
     }
 }

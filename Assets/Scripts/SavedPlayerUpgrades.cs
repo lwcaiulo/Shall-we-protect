@@ -11,4 +11,6 @@ public class SavedPlayerUpgrades : ScriptableObject
 
     public float currentScore;
 
+    public float currentHighscore;
+
 }

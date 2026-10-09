@@ -59,12 +59,13 @@ public class LevelManager : MonoBehaviour
         //Updates score only on certain screens
         if (SceneManager.GetActiveScene().name == "Win Screen")
         {
+            Debug.Log(PlayerPrefs.GetFloat("Highscore", 0));
             scoreText.text = "Score: " + playerUpgradeScript.currentScore;
-            highscoreText.text = "Highscore: " + scoreScript.highScore;
+            highscoreText.text = "Highscore: " + playerUpgradeScript.currentHighscore;
         }
         if(SceneManager.GetActiveScene().name == "Title Screen")
         {
-            highscoreText.text = "Highscore: " + scoreScript.highScore;
+            highscoreText.text = "Highscore: " + PlayerPrefs.GetFloat("Highscore", 0);
         }
 
 

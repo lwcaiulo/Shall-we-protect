@@ -37,13 +37,18 @@ public class UiTracking : MonoBehaviour
     }
     void Start()
     {
-        levelContinueCount = PlayerPrefs.GetInt("Level", 0);
-        scoreScript = GetComponent<ScoreScript>();
 
+        scoreScript = GetComponent<ScoreScript>();
+    }
+
+    //Seperate method from start so it can be called after retrieving previous session info
+    public void ContinueButton()
+    {
         //Updates continue button text and disallows access if player can't continue
         if (continueButton != null)
         {
-            if(playerUpgradeScript.currentLevel <= 1)
+            levelContinueCount = PlayerPrefs.GetInt("Level", 0);
+            if (playerUpgradeScript.currentLevel <= 1)
             {
                 continueButton.interactable = false;
                 continueText.text = "Continue";
@@ -55,7 +60,6 @@ public class UiTracking : MonoBehaviour
             }
         }
     }
-
 
     public void UpdateEnemyUI()
     {
@@ -88,6 +92,10 @@ public class UiTracking : MonoBehaviour
                 playerUpgradeScript.currentLevel = 0;
                 playerUpgradeScript.amountOfSizeUpgrades = 0;
                 playerUpgradeScript.amountOfSpeedUpgrades = 0;
+
+                PlayerPrefs.SetInt("Level", 0);
+                PlayerPrefs.SetInt("Size", 0);
+                PlayerPrefs.SetInt("Speed", 0);
 
                 scoreScript.UpdateScore();
                 scoreScript.EndOfGameScoreCalc();
