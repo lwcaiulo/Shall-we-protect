@@ -70,7 +70,7 @@ public class MouseControls : MonoBehaviour
             selectableMinions.Add(minionMove);
 
             //Wont run if on last level
-            if(selectableMinions[i].isSoloMinion == false)
+            if (selectableMinions[i].isSoloMinion == false)
             {
                 //Increases minions size based on upgrades
                 minionObjects[i].transform.localScale = Vector3.one * (1 + (playerUpgradeScript.amountOfSizeUpgrades * 0.2f));
@@ -83,24 +83,24 @@ public class MouseControls : MonoBehaviour
                 minionAgent.speed = 5 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.acceleration = 4 + playerUpgradeScript.amountOfSpeedUpgrades;
                 minionAgent.angularSpeed = 250 + (playerUpgradeScript.amountOfSpeedUpgrades * 25);
+
+            }
+
+            //Sets starting count for minions and updates it to the ui
+            UiTracking.Instance.minionCount = selectableMinions.Count;
+            UiTracking.Instance.UpdateMinionUI();
+
+            //Sets specific face for solo minion and doesn't give him upgrades for last level
+            if (selectableMinions[0].isSoloMinion == true)
+            {
+                selectedMinions.Add(selectableMinions[0]);
+                selectableMinions[0].minionRenderer.material.mainTexture = playerFaces[0];
             }
 
         }
-
-        //Sets starting count for minions and updates it to the ui
-        UiTracking.Instance.minionCount = selectableMinions.Count;
-        UiTracking.Instance.UpdateMinionUI();
-
-        //Sets specific face for solo minion and doesn't give him upgrades for last level
-        if(selectableMinions[0].isSoloMinion == true)
-        {
-            selectedMinions.Add(selectableMinions[0]);
-            selectableMinions[0].minionRenderer.material.mainTexture = playerFaces[0];
-        }
-
     }
 
-    void Update()
+    private void Update()
     {
         //Checks for minion count to fix nav mesh bugs when no minions left
         //Also can't select when game is paused

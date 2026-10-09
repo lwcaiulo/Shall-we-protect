@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SavedPlayerUpgrades
   m_EditorClassIdentifier: 
   amountOfSpeedUpgrades: 0
-  amountOfSizeUpgrades: 0
-  currentLevel: 1
-  currentScore: 0
+  amountOfSizeUpgrades: 1
+  currentLevel: 3
+  currentScore: 280
   currentHighscore: 1160
