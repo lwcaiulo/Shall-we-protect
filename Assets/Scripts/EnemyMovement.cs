@@ -90,6 +90,7 @@ public class EnemyMovement : MonoBehaviour
             }
 
             Destroy(this.gameObject);
+            debug
         }
 
         //When this enemy collides with minion
